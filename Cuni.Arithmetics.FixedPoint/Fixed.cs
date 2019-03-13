@@ -8,19 +8,21 @@ namespace Cuni.Arithmetics.FixedPoint
 {
     public struct Fixed<T> where T : QFormat
     {
+        private int theNumber;
+
         public Fixed(int number)
         {
-            throw new NotImplementedException();
+            theNumber = number;
         }
 
         public Fixed<T> Add(Fixed<T> num)
         {
-            throw new NotImplementedException();
+            return theNumber + num.theNumber;
         }
 
         public Fixed<T> Subtract(Fixed<T> num)
         {
-            throw new NotImplementedException();
+            return theNumber - num.theNumber;
         }
 
         public Fixed<T> Multiply(Fixed<T> num)
@@ -32,6 +34,8 @@ namespace Cuni.Arithmetics.FixedPoint
         {
             throw new NotImplementedException();
         }
+
+        public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
     }
 
 }
