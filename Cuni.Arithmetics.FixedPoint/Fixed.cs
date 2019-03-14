@@ -58,5 +58,4 @@ namespace Cuni.Arithmetics.FixedPoint
             return result.ToString();
         }
     }
-
 }
