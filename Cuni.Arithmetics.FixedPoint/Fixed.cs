@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public struct Fixed<T> where T : QFormat
+    public struct Fixed<T> where T : QFormat, new()
     {
+        private static int FractionalBitsCount;
+        static Fixed()
+        {
+            FractionalBitsCount = (new T()).GetNumOfFractionalBits();
+        } 
+
         private int theNumber;
 
         public Fixed(int number)
@@ -36,6 +42,17 @@ namespace Cuni.Arithmetics.FixedPoint
         }
 
         public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
+
+
+        public override string ToString()
+        {
+            double result = theNumber;
+
+            for (int i = 0; i < FractionalBitsCount; i++)
+                result /= 2;
+
+            return result.ToString();
+        }
     }
 
 }
