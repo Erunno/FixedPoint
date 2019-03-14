@@ -18,31 +18,35 @@ namespace Cuni.Arithmetics.FixedPoint
 
         public Fixed(int number)
         {
-            theNumber = number;
+            theNumber = number << FractionalBitsCount;
         }
 
         public Fixed<T> Add(Fixed<T> num)
         {
-            return theNumber + num.theNumber;
+            return new Fixed<T>() { theNumber = theNumber + num.theNumber };
         }
 
         public Fixed<T> Subtract(Fixed<T> num)
         {
-            return theNumber - num.theNumber;
+            return new Fixed<T>() { theNumber = theNumber + num.theNumber };
         }
 
         public Fixed<T> Multiply(Fixed<T> num)
         {
-            throw new NotImplementedException();
+            long result = (long)theNumber * (long)num.theNumber;
+            result = result >> FractionalBitsCount;
+
+            return new Fixed<T>() { theNumber = (int)result };
         }
 
         public Fixed<T> Divide(Fixed<T> num)
         {
-            throw new NotImplementedException();
+            long result = ((long)theNumber << FractionalBitsCount) / num.theNumber;
+
+            return new Fixed<T>() { theNumber = (int)result };
         }
 
         public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
-
 
         public override string ToString()
         {
