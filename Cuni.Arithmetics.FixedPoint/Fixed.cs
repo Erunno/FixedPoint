@@ -28,7 +28,7 @@ namespace Cuni.Arithmetics.FixedPoint
 
         public Fixed<T> Subtract(Fixed<T> num)
         {
-            return new Fixed<T>() { theNumber = theNumber + num.theNumber };
+            return new Fixed<T>() { theNumber = theNumber - num.theNumber };
         }
 
         public Fixed<T> Multiply(Fixed<T> num)
