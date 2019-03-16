@@ -33,8 +33,7 @@ namespace Cuni.Arithmetics.FixedPoint
 
         public Fixed<T> Multiply(Fixed<T> num)
         {
-            long result = (long)theNumber * (long)num.theNumber;
-            result = result >> FractionalBitsCount;
+            long result = ((long)theNumber * (long)num.theNumber) >> FractionalBitsCount;
 
             return new Fixed<T>() { theNumber = (int)result };
         }
@@ -48,14 +47,6 @@ namespace Cuni.Arithmetics.FixedPoint
 
         public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
 
-        public override string ToString()
-        {
-            double result = theNumber;
-
-            for (int i = 0; i < FractionalBitsCount; i++)
-                result /= 2;
-
-            return result.ToString();
-        }
+        public override string ToString() => ((double)theNumber / (1 << FractionalBitsCount)).ToString();
     }
 }
