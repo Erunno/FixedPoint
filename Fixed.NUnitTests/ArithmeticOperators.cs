@@ -6,7 +6,7 @@ namespace Tests
     [TestFixture(typeof(Q24_8))]
     [TestFixture(typeof(Q16_16))]
     [TestFixture(typeof(Q8_24))]
-    public class FixedTests<T> where T : QFormat<T>
+    public class FixedTests_AritmeticOps<T> where T : QFormat<T>
     {
         [TestCase(45, 78)] //both positive
         [TestCase(-42, 42)] //neg + pos

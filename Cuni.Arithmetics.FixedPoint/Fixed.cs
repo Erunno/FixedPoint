@@ -6,65 +6,78 @@ using System.Threading.Tasks;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public struct Fixed<T> where T : QFormat<T>
+    public struct Fixed<Q> where Q : QFormat<Q>
     {
         private readonly int theNumber;
-
+        private static int fractionalBits;
+        
         //Constructors
 
         static Fixed()
         {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(T).TypeHandle);
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(Q).TypeHandle);
+            fractionalBits = QFormat<Q>.FractionalBits;
         } 
 
         public Fixed(int number)
         {
-            theNumber = number << QFormat<T>.FractionalBits;
+            theNumber = number << fractionalBits;
         }
 
-        private Fixed(int rawInt, bool uselessArgument_NowICanHaveTwoAlmostSameConstructors = true) 
+        private Fixed(int rawInt, bool uselessArgument_JustToDistinguishBetweenConstructors = true) 
         {
             theNumber = rawInt;
         }
 
         //Arithmetic methods
 
-        public Fixed<T> Add(Fixed<T> num)
+        public Fixed<Q> Add(Fixed<Q> num)
         {
-            return new Fixed<T>(rawInt: theNumber + num.theNumber);
+            return new Fixed<Q>(rawInt: theNumber + num.theNumber);
         }
 
-        public Fixed<T> Subtract(Fixed<T> num)
+        public Fixed<Q> Subtract(Fixed<Q> num)
         {
-            return new Fixed<T>(rawInt: theNumber - num.theNumber);
+            return new Fixed<Q>(rawInt: theNumber - num.theNumber);
         }
 
-        public Fixed<T> Multiply(Fixed<T> num)
+        public Fixed<Q> Multiply(Fixed<Q> num)
         {
-            long result = ((long)theNumber * (long)num.theNumber) >> QFormat<T>.FractionalBits;
+            long result = ((long)theNumber * (long)num.theNumber) >> fractionalBits;
 
-            return new Fixed<T>(rawInt: (int)result);
+            return new Fixed<Q>(rawInt: (int)result);
         }
 
-        public Fixed<T> Divide(Fixed<T> num)
+        public Fixed<Q> Divide(Fixed<Q> num)
         {
-            long result = ((long)theNumber << QFormat<T>.FractionalBits) / num.theNumber;
+            long result = ((long)theNumber << fractionalBits) / num.theNumber;
 
-            return new Fixed<T>(rawInt: (int)result );
+            return new Fixed<Q>(rawInt: (int)result );
         }
 
         //Operators
 
-        public static Fixed<T> operator +(Fixed<T> f1, Fixed<T> f2) => f1.Add(f2);
-        public static Fixed<T> operator -(Fixed<T> f1, Fixed<T> f2) => f1.Subtract(f2);
-        public static Fixed<T> operator *(Fixed<T> f1, Fixed<T> f2) => f1.Multiply(f2);
-        public static Fixed<T> operator /(Fixed<T> f1, Fixed<T> f2) => f1.Divide(f2);
+        public static Fixed<Q> operator +(Fixed<Q> f1, Fixed<Q> f2) => f1.Add(f2);
+        public static Fixed<Q> operator -(Fixed<Q> f1, Fixed<Q> f2) => f1.Subtract(f2);
+        public static Fixed<Q> operator *(Fixed<Q> f1, Fixed<Q> f2) => f1.Multiply(f2);
+        public static Fixed<Q> operator /(Fixed<Q> f1, Fixed<Q> f2) => f1.Divide(f2);
 
-        public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
-        public static explicit operator double(Fixed<T> num) => num.ToDouble();
+        public static implicit operator Fixed<Q>(int num) => new Fixed<Q>(num);
+        public static explicit operator double(Fixed<Q> num) => num.ToDouble();
 
-        public double ToDouble() => ((double)theNumber / (1 << QFormat<T>.FractionalBits));
+        public static explicit operator Fixed<Q24_8>(Fixed<Q> num)  => Convert<Q, Q24_8>(num);
+        public static explicit operator Fixed<Q16_16>(Fixed<Q> num) => Convert<Q, Q16_16>(num);
+        public static explicit operator Fixed<Q8_24>(Fixed<Q> num)  => Convert<Q, Q8_24>(num);
 
+        private static Fixed<To> Convert<From,To>(Fixed<From> num) where To : QFormat<To> where From: QFormat<From>
+        {
+            int newNumber = Fixed<To>.fractionalBits > Fixed<From>.fractionalBits 
+                ? num.theNumber << (Fixed<To>.fractionalBits - Fixed<From>.fractionalBits) 
+                : num.theNumber >> (Fixed<From>.fractionalBits - Fixed<To>.fractionalBits);
+            return new Fixed<To>(rawInt: newNumber);
+        }
+
+        public double ToDouble() => ((double)theNumber / (1 << fractionalBits));
         public override string ToString() => ToDouble().ToString();
     }
 }
