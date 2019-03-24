@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public abstract class QFormat
+    public abstract class QFormat<T>
     {
-        public abstract int GetNumOfFractionalBits();
+        public static int FractionalBits;
     }
 
-    public class Q24_8 : QFormat
+    public class Q24_8 : QFormat<Q24_8>
     {
-        public override int GetNumOfFractionalBits() => 8;
+        static Q24_8() => FractionalBits = 8;
     }
-    public class Q16_16 : QFormat
+    public class Q16_16 : QFormat<Q16_16>
     {
-        public override int GetNumOfFractionalBits() => 16;
+        static Q16_16() => FractionalBits = 16;
     }
-    public class Q8_24 : QFormat
+    public class Q8_24 : QFormat<Q8_24>
     {
-        public override int GetNumOfFractionalBits() => 24;
+        static Q8_24() => FractionalBits = 24;
     }
 }
