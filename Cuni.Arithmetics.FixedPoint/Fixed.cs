@@ -13,35 +13,40 @@ namespace Cuni.Arithmetics.FixedPoint
             System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(T).TypeHandle);
         } 
 
-        private int theNumber;
+        private readonly int theNumber;
 
         public Fixed(int number)
         {
             theNumber = number << QFormat<T>.FractionalBits;
         }
 
+        private Fixed(int rawInt, bool uselessArgument_NowICanHaveTwoAlmostSameConstructors = true) 
+        {
+            theNumber = rawInt;
+        }
+
         public Fixed<T> Add(Fixed<T> num)
         {
-            return new Fixed<T>() { theNumber = theNumber + num.theNumber };
+            return new Fixed<T>(rawInt: theNumber + num.theNumber);
         }
 
         public Fixed<T> Subtract(Fixed<T> num)
         {
-            return new Fixed<T>() { theNumber = theNumber - num.theNumber };
+            return new Fixed<T>(rawInt: theNumber - num.theNumber);
         }
 
         public Fixed<T> Multiply(Fixed<T> num)
         {
             long result = ((long)theNumber * (long)num.theNumber) >> QFormat<T>.FractionalBits;
 
-            return new Fixed<T>() { theNumber = (int)result };
+            return new Fixed<T>(rawInt: (int)result);
         }
 
         public Fixed<T> Divide(Fixed<T> num)
         {
             long result = ((long)theNumber << QFormat<T>.FractionalBits) / num.theNumber;
 
-            return new Fixed<T>() { theNumber = (int)result };
+            return new Fixed<T>(rawInt: (int)result );
         }
 
         public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
