@@ -5,20 +5,23 @@ using Cuni.Arithmetics.FixedPoint;
 namespace Fixed.Tests
 {
     [TestClass]
-    public class Fixed_Q16_16
+    public class Fixed_Q16_16 
     {
         [TestMethod]
-        public void Add_additionOfSimpleNumbers_SideTestOfToString()
+        [DataRow(5)]
+        [DataRow(6)]
+        [DataRow(8)]
+        public void Add_additionOfSimpleNumbers_SideTestOfToString<T>(int aa) where T: QFormat<T>
         {
             //Arrange
-            Fixed<Q16_16> a = new Fixed<Q16_16>(24);
-            Fixed<Q16_16> b = new Fixed<Q16_16>(42);
+            Fixed<T> a = new Fixed<T>(24);
+            Fixed<T> b = new Fixed<T>(42);
 
             //Act
             var result = a.Add(b);
 
             //Assert
-            Assert.AreEqual("66", result.ToString()); //result test
+            Assert.AreEqual(aa.ToString(), result.ToString()); //result test
 
               //I dont have to test whether a or b is not changed since Fixed<T> is struct 
         }

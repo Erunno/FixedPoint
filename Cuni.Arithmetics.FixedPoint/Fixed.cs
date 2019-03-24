@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public struct Fixed<T> where T : QFormat<T>, new()
+    public struct Fixed<T> where T : QFormat<T>
     {
+        private readonly int theNumber;
+
+        //Constructors
+
         static Fixed()
         {
             System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(T).TypeHandle);
         } 
-
-        private readonly int theNumber;
 
         public Fixed(int number)
         {
@@ -24,6 +26,8 @@ namespace Cuni.Arithmetics.FixedPoint
         {
             theNumber = rawInt;
         }
+
+        //Arithmetic methods
 
         public Fixed<T> Add(Fixed<T> num)
         {
@@ -49,7 +53,15 @@ namespace Cuni.Arithmetics.FixedPoint
             return new Fixed<T>(rawInt: (int)result );
         }
 
+        //Operators
+
+        public static Fixed<T> operator +(Fixed<T> f1, Fixed<T> f2) => f1.Add(f2);
+        public static Fixed<T> operator -(Fixed<T> f1, Fixed<T> f2) => f1.Subtract(f2);
+        public static Fixed<T> operator *(Fixed<T> f1, Fixed<T> f2) => f1.Multiply(f2);
+        public static Fixed<T> operator /(Fixed<T> f1, Fixed<T> f2) => f1.Divide(f2);
+
         public static implicit operator Fixed<T>(int num) => new Fixed<T>(num);
+        public static explicit operator double(Fixed<T> num) => num.ToDouble();
 
         public double ToDouble() => ((double)theNumber / (1 << QFormat<T>.FractionalBits));
 
