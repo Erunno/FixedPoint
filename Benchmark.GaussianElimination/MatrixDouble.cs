@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cuni.Arithmetics.FixedPoint;
 
 namespace Benchmark.GaussianElimination
 {
-    class Matrix<Q> where Q : QFormat<Q>
+    /**/
+    class MatrixDouble
     {
-        private Fixed<Q>[,] matrix;
-        private Fixed<Q> delta;
+        private double[,] matrix;
+        private double delta;
         int rows, columns;
 
-        public Matrix(Fixed<Q>[,] matrix)
+        public MatrixDouble(double[,] matrix)
         {
             this.matrix = matrix;
             rows = matrix.GetLength(0);
             columns = matrix.GetLength(1);
-            delta = (Fixed<Q>)1 / 100;
+            delta = (double)1 / 100;
         }
 
         public void GaussElim()
@@ -39,7 +39,7 @@ namespace Benchmark.GaussianElimination
         private bool TrySetPivot(int row, int col) 
         {
             for (int i = row; i < rows; i++)
-                if(!matrix[i,col].IsZero(delta))
+                if(!IsDeltaZero(matrix[i,col]))
                 {
                     SwapRows(row, i);
                     return true;
@@ -50,10 +50,10 @@ namespace Benchmark.GaussianElimination
 
         private void EliminateNumBelowPivot(int rowPiv, int rowElim, int pivotCol)
         {
-            if (matrix[rowElim, pivotCol].IsZero(delta)) //if there is already zero there is no work...
+            if (IsDeltaZero(matrix[rowElim, pivotCol])) //if there is already zero there is no work...
                 return;
 
-            Fixed<Q> coef = matrix[rowPiv, pivotCol] / matrix[rowElim, pivotCol];
+            double coef = matrix[rowPiv, pivotCol] / matrix[rowElim, pivotCol];
 
             for (int col = pivotCol; col < columns; col++)
                 matrix[rowElim, col] = matrix[rowElim, col] * coef - matrix[rowPiv, col];
@@ -63,11 +63,13 @@ namespace Benchmark.GaussianElimination
         {
             for (int i = 0; i < columns; i++)
             {
-                Fixed<Q> temp = matrix[row1, i];
+                double temp = matrix[row1, i];
                 matrix[row1, i] = matrix[row2, i];
                 matrix[row2, i] = temp;
             }
         }
+
+        private bool IsDeltaZero(double d) => d > -delta && d < delta; 
 
         public override string ToString()
         {
@@ -82,6 +84,6 @@ namespace Benchmark.GaussianElimination
 
             return sb.ToString();
         }
-
-    }
+        
+    }//*/
 }
