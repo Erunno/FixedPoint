@@ -96,5 +96,7 @@ namespace Cuni.Arithmetics.FixedPoint
         public double ToDouble() => ((double)theNumber / (1 << fractionalBits));
         public override string ToString() => ToDouble().ToString();
 
+        public override bool Equals(object obj) => base.Equals(obj);
+        public override int GetHashCode() => base.GetHashCode();
     }
 }
