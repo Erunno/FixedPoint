@@ -176,8 +176,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Matrix.cs" />
+    <Compile Include="MatrixOps.cs" />
     <Compile Include="MatrixDouble.cs" />
+    <Compile Include="MatrixMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

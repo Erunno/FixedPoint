@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cuni.Arithmetics.FixedPoint
 {
-    public struct Fixed<Q> where Q : QFormat<Q>
+    public struct Fixed<Q> : IComparable<Fixed<Q>> where Q : QFormat<Q>
     {
         private readonly int theNumber;
         private static int fractionalBits;
@@ -64,6 +64,19 @@ namespace Cuni.Arithmetics.FixedPoint
         public static Fixed<Q> operator -(Fixed<Q> f1, Fixed<Q> f2) => f1.Subtract(f2);
         public static Fixed<Q> operator *(Fixed<Q> f1, Fixed<Q> f2) => f1.Multiply(f2);
         public static Fixed<Q> operator /(Fixed<Q> f1, Fixed<Q> f2) => f1.Divide(f2);
+        public static Fixed<Q> operator -(Fixed<Q> f) => new Fixed<Q>(rawInt: -f.theNumber);
+
+        public int CompareTo(Fixed<Q> other) => theNumber.CompareTo(other.theNumber);
+        public static bool operator <(Fixed<Q> f1, Fixed<Q> f2)  => f1.theNumber < f2.theNumber;
+        public static bool operator >(Fixed<Q> f1, Fixed<Q> f2)  => f1.theNumber > f2.theNumber;
+        public static bool operator <=(Fixed<Q> f1, Fixed<Q> f2) => f1.theNumber <= f2.theNumber;
+        public static bool operator >=(Fixed<Q> f1, Fixed<Q> f2) => f1.theNumber >= f2.theNumber;
+        public static bool operator ==(Fixed<Q> f1, Fixed<Q> f2) => f1.theNumber == f2.theNumber;
+        public static bool operator !=(Fixed<Q> f1, Fixed<Q> f2) => f1.theNumber != f2.theNumber;
+
+
+        public static Fixed<Q> operator >>(Fixed<Q> f, int bits) => new Fixed<Q>(rawInt: f.theNumber >> bits);
+        public static Fixed<Q> operator <<(Fixed<Q> f, int bits) => new Fixed<Q>(rawInt: f.theNumber << bits);
 
         public static implicit operator Fixed<Q>(int num) => new Fixed<Q>(num);
         public static explicit operator double(Fixed<Q> num) => num.ToDouble();
@@ -82,5 +95,6 @@ namespace Cuni.Arithmetics.FixedPoint
 
         public double ToDouble() => ((double)theNumber / (1 << fractionalBits));
         public override string ToString() => ToDouble().ToString();
+
     }
 }

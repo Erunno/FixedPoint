@@ -7,13 +7,13 @@ using Cuni.Arithmetics.FixedPoint;
 
 namespace Benchmark.GaussianElimination
 {
-    class Matrix<Q> where Q : QFormat<Q>
+    class MatrixMethods<Q> where Q : QFormat<Q>
     {
         private Fixed<Q>[,] matrix;
         private Fixed<Q> delta;
         int rows, columns;
 
-        public Matrix(Fixed<Q>[,] matrix)
+        public MatrixMethods(Fixed<Q>[,] matrix)
         {
             this.matrix = matrix;
             rows = matrix.GetLength(0);
@@ -32,14 +32,14 @@ namespace Benchmark.GaussianElimination
                 if (currentCol == columns) return; //there is just zero rows
 
                 for (int rowBelowPivot = rowPiv + 1; rowBelowPivot < rows; rowBelowPivot++) //making zeros below pivot
-                    EliminateNumBelowPivot(rowPiv ,rowBelowPivot, currentCol);
+                    EliminateNumBelowPivot(rowPiv, rowBelowPivot, currentCol);
             }
         }
 
-        private bool TrySetPivot(int row, int col) 
+        private bool TrySetPivot(int row, int col)
         {
             for (int i = row; i < rows; i++)
-                if(!matrix[i,col].IsZero(delta))
+                if (!matrix[i, col].IsZero(delta))
                 {
                     SwapRows(row, i);
                     return true;
@@ -53,10 +53,10 @@ namespace Benchmark.GaussianElimination
             if (matrix[rowElim, pivotCol].IsZero(delta)) //if there is already zero there is no work...
                 return;
 
-            Fixed<Q> coef = matrix[rowPiv, pivotCol] / matrix[rowElim, pivotCol];
+            Fixed<Q> coef = matrix[rowPiv, pivotCol].Divide(matrix[rowElim, pivotCol]);
 
             for (int col = pivotCol; col < columns; col++)
-                matrix[rowElim, col] = matrix[rowElim, col] * coef - matrix[rowPiv, col];
+                matrix[rowElim, col] = matrix[rowElim, col].Multiply(coef).Subtract(matrix[rowPiv, col]);
         }
 
         private void SwapRows(int row1, int row2)

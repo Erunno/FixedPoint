@@ -96,5 +96,21 @@ namespace Tests
             //Assert
             Assert.AreEqual(expectedResult, actualResult.ToDouble(), delta: 0.01);
         }
+
+        [TestCase(42)] //pos
+        [TestCase(-42)] //neg
+        [TestCase(0)] //zero
+        public void OperatorUnaryMinus(int num)
+        {
+            //Arrange
+            Fixed<T> left = new Fixed<T>(num);
+            double expectedResult = -num;
+
+            //Act
+            Fixed<T> actualResult = -left;
+
+            //Assert
+            Assert.AreEqual(expectedResult, actualResult.ToDouble());
+        }
     }
 }
