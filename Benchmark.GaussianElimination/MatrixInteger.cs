@@ -38,7 +38,7 @@ namespace Benchmark.GaussianElimination
         private bool TrySetPivot(int row, int col)
         {
             for (int i = row; i < rows; i++)
-                if (!IsDeltaZero(matrix[i, col]))
+                if (matrix[i, col] != 0)
                 {
                     SwapRows(row, i);
                     return true;
@@ -49,7 +49,7 @@ namespace Benchmark.GaussianElimination
 
         private void EliminateNumBelowPivot(int rowPiv, int rowElim, int pivotCol)
         {
-            if (IsDeltaZero(matrix[rowElim, pivotCol])) //if there is already zero there is no work...
+            if (matrix[rowElim, pivotCol] == 0) //if there is already zero there is no work...
                 return;
 
             int coef = matrix[rowPiv, pivotCol] / matrix[rowElim, pivotCol];
