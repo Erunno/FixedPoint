@@ -176,6 +176,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MatrixInteger.cs" />
     <Compile Include="MatrixOps.cs" />
     <Compile Include="MatrixDouble.cs" />
     <Compile Include="MatrixMethods.cs" />
