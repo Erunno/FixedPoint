@@ -55,7 +55,6 @@ namespace Cuni.Arithmetics.FixedPoint
             return new Fixed<Q>(rawInt: (int)result );
         }
 
-        public bool IsZero() => theNumber == 0;
         public bool IsZero(Fixed<Q> delta) => theNumber < delta.theNumber && theNumber > -delta.theNumber;
 
         //Operators
@@ -77,6 +76,9 @@ namespace Cuni.Arithmetics.FixedPoint
 
         public static Fixed<Q> operator >>(Fixed<Q> f, int bits) => new Fixed<Q>(rawInt: f.theNumber >> bits);
         public static Fixed<Q> operator <<(Fixed<Q> f, int bits) => new Fixed<Q>(rawInt: f.theNumber << bits);
+        public static Fixed<Q> operator &(Fixed<Q> f, int mask) => new Fixed<Q>(rawInt: f.theNumber & mask);
+        public static Fixed<Q> operator |(Fixed<Q> f, int mask) => new Fixed<Q>(rawInt: f.theNumber | mask);
+        public static Fixed<Q> operator ^(Fixed<Q> f, int mask) => new Fixed<Q>(rawInt: f.theNumber ^ mask);
 
         public static implicit operator Fixed<Q>(int num) => new Fixed<Q>(num);
         public static explicit operator double(Fixed<Q> num) => num.ToDouble();

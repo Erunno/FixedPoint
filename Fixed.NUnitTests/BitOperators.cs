@@ -46,5 +46,63 @@ namespace Fixed.NUnitTests
             //Assert
             Assert.AreEqual(expected, actual.ToDouble(), delta: 0.01);
         }
+
+
+        [TestCase(16, 0x0)]
+        [TestCase(42, 0xFFF_FFFF)]
+        [TestCase(-14, 0xFFFF)]
+        [TestCase(42, 0xEAD_BEEF)]
+        [TestCase(1, 0x1234)]
+        public void OperatorAnd(int num, int mask)
+        {
+            //Arrange
+            Fixed<Q> fixedLeft = new Fixed<Q>(num);
+            int shiftAmount = int.Parse(typeof(Q).ToString().Split('_')[1]); //num of fractional bits
+            double expected = ((num << shiftAmount) & mask) / (double)(1 << shiftAmount);
+
+            //Act
+            Fixed<Q> actual = fixedLeft & mask;
+
+            //Assert
+            Assert.AreEqual(expected, actual.ToDouble(), delta: 0.01);
+        }
+
+        [TestCase(16, 0x0)]
+        [TestCase(42, 0xFFF_FFFF)]
+        [TestCase(-14, 0xFFFF)]
+        [TestCase(42, 0xEAD_BEEF)]
+        [TestCase(1, 0x1234)]
+        public void OperatorOr(int num, int mask)
+        {
+            //Arrange
+            Fixed<Q> fixedLeft = new Fixed<Q>(num);
+            int shiftAmount = int.Parse(typeof(Q).ToString().Split('_')[1]); //num of fractional bits
+            double expected = ((num << shiftAmount) | mask) / (double)(1 << shiftAmount);
+
+            //Act
+            Fixed<Q> actual = fixedLeft | mask;
+
+            //Assert
+            Assert.AreEqual(expected, actual.ToDouble(), delta: 0.01);
+        }
+
+        [TestCase(16, 0x0)]
+        [TestCase(42, 0xFFF_FFFF)]
+        [TestCase(-14, 0xFFFF)]
+        [TestCase(42, 0xEAD_BEEF)]
+        [TestCase(1, 0x1234)]
+        public void OperatorXor(int num, int mask)
+        {
+            //Arrange
+            Fixed<Q> fixedLeft = new Fixed<Q>(num);
+            int shiftAmount = int.Parse(typeof(Q).ToString().Split('_')[1]); //num of fractional bits
+            double expected = ((num << shiftAmount) ^ mask) / (double)(1 << shiftAmount);
+
+            //Act
+            Fixed<Q> actual = fixedLeft ^ mask;
+
+            //Assert
+            Assert.AreEqual(expected, actual.ToDouble(), delta: 0.01);
+        }
     }
 }
