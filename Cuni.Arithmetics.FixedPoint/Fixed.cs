@@ -65,7 +65,7 @@ namespace Cuni.Arithmetics.FixedPoint
         public static Fixed<Q> operator /(Fixed<Q> f1, Fixed<Q> f2) => f1.Divide(f2);
         public static Fixed<Q> operator -(Fixed<Q> f) => new Fixed<Q>(rawInt: -f.theNumber);
 
-        public int CompareTo(Fixed<Q> other) => theNumber.CompareTo(other.theNumber);
+        public int CompareTo(Fixed<Q> other) => theNumber - other.theNumber;
         public static bool operator <(Fixed<Q> f1, Fixed<Q> f2)  => f1.theNumber < f2.theNumber;
         public static bool operator >(Fixed<Q> f1, Fixed<Q> f2)  => f1.theNumber > f2.theNumber;
         public static bool operator <=(Fixed<Q> f1, Fixed<Q> f2) => f1.theNumber <= f2.theNumber;
